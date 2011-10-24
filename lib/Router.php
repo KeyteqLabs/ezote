@@ -9,7 +9,7 @@ class Router
      * @param string $module
      * @param string $action
      * @param array $params
-     * @return ezote\Response;
+     * @return \ezote\lib\Response;
      */
     public function handle($extension, $module, $action, $params)
     {
