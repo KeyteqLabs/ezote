@@ -2,6 +2,8 @@
 
 namespace ezote;
 
+use \eZExtension;
+
 class Autoloader
 {
     public static $extensionDir = null;
@@ -22,7 +24,7 @@ class Autoloader
      */
     static public function autoload($class)
     {
-        $file = static::$extensionDir . str_replace('\\', '/', $class) .'.php';
+        $file = static::$extensionDir . '/' . str_replace('\\', '/', $class) .'.php';
         if (file_exists($file))
             return require $file;
         return false;

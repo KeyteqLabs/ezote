@@ -1,7 +1,8 @@
 <?php
 
-namespace ezote;
-
-require_once dirname(__DIR__) . '/lib/Autoloader.php';
-
-Autoloader::register();
+$eZTemplateOperatorArray = array(
+    array(
+        'class' => 'ezote\\Autoloader',
+        'script' => 'extension/ezote/Autoloader.php'
+    )
+);
