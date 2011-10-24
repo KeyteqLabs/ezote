@@ -8,8 +8,8 @@ $module = $Params['module'];
 $extension = $Params['extension'];
 $action = $Params['action'] ?: 'index';
 
-$restParams = $Params['Parameters'];
+$restParams = array_slice($Params['Parameters'], 3);
 
-$response = $router->handle($extension, $module, $action, $Params['Parameters']);
+$response = $router->handle($extension, $module, $action, $restParams);
 
 $response->run();
