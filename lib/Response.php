@@ -9,7 +9,7 @@ class Response
     protected $content = array();
     protected $options = array();
 
-    public function __construct(array $content = array(), array $options = array())
+    public function __construct($content = array(), array $options = array())
     {
         $this->content = $content;
         $this->options = $options;
