@@ -52,7 +52,7 @@ class Response
             if (is_array($content))
             {
                 foreach ($content as $key => $val)
-                    $tpl->assignValue($key, $val);
+                    $tpl->setVariable($key, $val);
             }
             $content = $tpl->fetch($options['template']);
         }
