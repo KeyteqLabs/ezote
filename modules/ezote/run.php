@@ -1,6 +1,5 @@
 <?php
 
-ini_set('display_errors', 1);
 ezote\Autoloader::register();
 $router = new \ezote\lib\Router;
 
