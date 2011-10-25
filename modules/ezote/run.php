@@ -12,4 +12,4 @@ $restParams = array_slice($Params['Parameters'], 3);
 
 $response = $router->handle($extension, $module, $action, $restParams);
 
-$response->run();
+$Result = $response->run();

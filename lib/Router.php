@@ -13,7 +13,8 @@ class Router
      */
     public function handle($extension, $module, $action, $params)
     {
-        $nsClass = join('\\', array($extension, 'modules', $module, $module));
+        $class = Inflector::camelize($module);
+        $nsClass = join('\\', array($extension, 'modules', $module, $class));
         // TODO Pass in context in constructor?
         $controller = new $nsClass();
         $response = call_user_func_array(array($controller, $action), $params);
