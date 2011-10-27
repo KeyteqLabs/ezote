@@ -1,13 +1,18 @@
 <?php
 
-ezote\Autoloader::register();
+ezoteAutoloader::register();
 $router = new \ezote\lib\Router;
 
-$module = $Params['module'];
-$extension = $Params['extension'];
-$action = $Params['action'] ?: 'index';
+$Params += array('module' => false, 'extension' => 'ezote', 'action' => 'index');
 
-$restParams = array_slice($Params['Parameters'], 3);
+$functionName = $Params['FunctionName'];
+$module = $Params['module'] ?: $functionName;
+$extension = $Params['extension'];
+$action = $Params['action'];
+
+$originalParams = $Params['Module']->Functions[$functionName]['params'];
+
+$restParams = array_slice($Params['Parameters'], count($originalParams));
 
 $response = $router->handle($extension, $module, $action, $restParams);
 
