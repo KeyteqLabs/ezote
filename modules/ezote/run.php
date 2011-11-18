@@ -1,6 +1,6 @@
 <?php
 
-ezoteAutoloader::register();
+\ezote\Autoloader::register();
 $router = new \ezote\lib\Router;
 
 $Params += array('module' => false, 'extension' => 'ezote', 'action' => 'index');
