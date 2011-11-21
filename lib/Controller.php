@@ -16,6 +16,13 @@ use \eZExecution;
  */
 class Controller
 {
+    public $http;
+
+    public function __construct()
+    {
+        $this->http = HTTP::instance();
+    }
+
     /**
      * Helper to create a `Response` object
      * @param mixed $content
