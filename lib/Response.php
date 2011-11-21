@@ -8,20 +8,73 @@ class Response
 {
     protected $content = array();
     protected $options = array();
+    
+    /**
+     * Complete list of HTTP codes mapped to their text counter part
+     * @var array
+     */
+    protected $codes = array(
+        200 => 'OK',
+        201 => 'Created',
+        202 => 'Accepted',
+        203 => 'Non-Authoritative Information',
+        204 => 'No Content',
+        205 => 'Reset Content',
+        206 => 'Partial Content',
+
+        300 => 'Multiple Choices',
+        301 => 'Moved Permanently',
+        302 => 'Found',
+        303 => 'See Other',
+        304 => 'Not Modified',
+        305 => 'Use Proxy',
+        307 => 'Temporary Redirect',
+
+        400 => 'Bad Request',
+        401 => 'Unauthorized',
+        402 => 'Payment Required',
+        403 => 'Forbidden',
+        404 => 'Not Found',
+        405 => 'Method Not Allowed',
+        406 => 'Not Acceptable',
+        407 => 'Proxy Authentication Required',
+        408 => 'Request Timeout',
+        409 => 'Conflict',
+        410 => 'Gone',
+        411 => 'Length Required',
+        412 => 'Precondition Failed',
+        413 => 'Request Entity Too Large',
+        414 => 'Request-URI Too Long',
+        415 => 'Unsupported Media Type',
+        416 => 'Requested Range Not Satisfiable',
+        417 => 'Expectation Failed',
+
+        500 => 'Internal Server Error',
+        501 => 'Not Implemented',
+        502 => 'Bad Gateway',
+        503 => 'Service Unavailable',
+        504 => 'Gateway Timeout',
+        505 => 'HTTP Version Not Supported'
+    );
 
     public function __construct($content = array(), array $options = array())
     {
         $this->content = $content;
-        $this->options = $options;
+        $this->options = $options + array(
+            'status' => 200,
+            'type' => 'tpl',
+            'headers' => array()
+        );
     }
 
     public function run()
     {
-        $options = $this->options + array(
-            'type' => 'tpl',
-            'headers' => array()
-        );
         $content = $this->content;
+        $status = $this->options['status'];
+        $options = $this->options;
+
+        // Give response header for status code
+        header('HTTP/1.1 ' . $status . ' ' . $this->codes[$status]);
 
         switch ($options['type'])
         {
@@ -29,19 +82,25 @@ class Response
                 $options['headers'] += array(
                     'Content-type' => 'application/json'
                 );
-                static::_headers($options['headers']);
+                $this->_headers($options['headers']);
                 echo json_encode($content);
                 return eZExecution::cleanExit();
                 break;
             case 'tpl':
-                $options += array(
-                    'pagelayout' => 'pagelayout.tpl'
+                // Default pagelayout
+                $options += array('pagelayout' => 'pagelayout.tpl');
+                return $this->_renderTpl($content, $options);
+            case 'text':
+                return array(
+                    'pagelayout' => false,
+                    'content' => $this->content
                 );
-                return static::_renderTpl($content, $options);
+                break;
         }
+        return compact('content');
     }
 
-    protected static function _renderTpl($content, array $options = array())
+    protected function _renderTpl($content, array $options = array())
     {
         $result = array(
             'pagelayout' => $options['pagelayout']
@@ -60,7 +119,7 @@ class Response
         return $result;
     }
 
-    protected static function _headers($headers)
+    protected function _headers($headers)
     {
         foreach ($headers as $name => $value)
             header($name . ': ' . $value);
