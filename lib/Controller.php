@@ -26,4 +26,28 @@ class Controller
     {
         return new Response($content, $options);
     }
+
+    /**
+     * Build the needed information for module setup
+     *
+     * @return array Three members: Module, FunctionList and ViewList
+     */
+    public static function getDefinition()
+    {
+        $class = get_called_class();
+        $classParts = explode('\\', $class);
+        $className = array_pop($classParts);
+        $ViewList = array();
+        foreach (get_class_methods($class) as $view)
+        {
+            $ViewList[$view] = array('script' => 'module.php');
+        }
+
+        $Module = array(
+            'name' => Inflector::underscore($className)
+        );
+        $FunctionList = array();
+
+        return array($Module, $FunctionList, $ViewList);
+    }
 }

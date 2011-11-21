@@ -33,6 +33,6 @@ class Inflector
      * @return string
      */
     public static function underscore($word) {
-        return strtolower(preg_replace('#([a-z][A-Z])#', '-\\1', $word));
+        return strtolower(preg_replace('#([a-z])([A-Z])#', '\\1_\\2', $word));
     }
 }
