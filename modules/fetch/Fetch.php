@@ -5,7 +5,7 @@ use \eZFunctionHandler;
 
 class Fetch extends \ezote\lib\Controller
 {
-    public function content($type='list')
+    public function content($type = 'list')
     {
         $criteria = (array) $_GET['criteria'];
         $objects = eZFunctionHandler::execute('content', $type, $criteria);
