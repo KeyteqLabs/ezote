@@ -18,6 +18,10 @@ class Controller
 {
     public $http;
 
+    protected static $blockedMethods = array(
+        '__construct', 'response', 'getDefinition'
+    );
+
     public function __construct()
     {
         $this->http = HTTP::instance();
@@ -39,7 +43,7 @@ class Controller
      *
      * @return array Three members: Module, FunctionList and ViewList
      */
-    public static function getDefinition()
+    public static function getDefinition(array $merge = array())
     {
         $class = get_called_class();
         $classParts = explode('\\', $class);
@@ -47,7 +51,11 @@ class Controller
         $ViewList = array();
         foreach (get_class_methods($class) as $view)
         {
+            if (in_array($view, static::$blockedMethods)) continue;
+
             $ViewList[$view] = array('script' => 'module.php');
+            if (isset($merge['ViewList']))
+                $ViewList[$view] += $merge['ViewList'];
         }
 
         $Module = array(
