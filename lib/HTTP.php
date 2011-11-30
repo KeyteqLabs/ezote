@@ -27,7 +27,7 @@ class HTTP
      * Reference eZHTTPTool
      * @var \eZHTTPTool
      */
-    protected $ez = null;
+    protected $_ez = null;
 
     /**
      * Original server data
@@ -44,7 +44,7 @@ class HTTP
      */
     protected function __construct($eZHTTP, $server)
     {
-        $this->ez = $eZHTTP;
+        $this->_ez = $eZHTTP;
         $this->server = $server;
     }
 
@@ -57,6 +57,7 @@ class HTTP
     {
         if (static::$_instance === false)
             static::$_instance = new static(eZHTTPTool::instance(), $_SERVER);
+        return static::$_instance;
     }
 
     /**
@@ -67,6 +68,16 @@ class HTTP
     public function method($is = false)
     {
         $value = $this->server['REQUEST_METHOD'];
-        return is_string($is) ? $is === $value : $value;
+        return is_string($is) ? strtolower($is) === strtolower($value) : $value;
+    }
+
+    /**
+     * Get the eZPublish HTTP tool
+     *
+     * @return eZHTTPTool
+     */
+    public function ez()
+    {
+        return $this->_ez;
     }
 }
