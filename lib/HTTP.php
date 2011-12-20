@@ -10,13 +10,13 @@
 namespace ezote\lib;
 
 use \eZHTTPTool;
+use \stdClass;
 
 /**
  * HTTP Helper for the bits and pieces eZHTTPTool does not help out with
  */
 class HTTP
 {
-
     /**
      * Maintain singleton
      * @var object
@@ -36,6 +36,18 @@ class HTTP
     protected $server = array();
 
     /**
+     * HTTP POST data
+     * @var object
+     */
+    public $data;
+
+    /**
+     * HTTP GET data
+     * @var object
+     */
+    public $query;
+
+    /**
      * Construct HTTP
      * 
      * @param object $eZHTTP
@@ -46,6 +58,14 @@ class HTTP
     {
         $this->_ez = $eZHTTP;
         $this->server = $server;
+
+        $this->data = new stdClass;
+        foreach ($_POST as $key => $val)
+            $this->data->$key = $val;
+
+        $this->query = new stdClass;
+        foreach ($_GET as $key => $val)
+            $this->query->$key = $val;
     }
 
     /**

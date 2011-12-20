@@ -102,9 +102,6 @@ class Response
 
     protected function _renderTpl($content, array $options = array())
     {
-        $result = array(
-            'pagelayout' => $options['pagelayout']
-        );
         if (isset($options['template']))
         {
             $tpl = \eZTemplate::factory();
@@ -114,9 +111,9 @@ class Response
                     $tpl->setVariable($key, $val);
             }
             $content = $tpl->fetch($options['template']);
+            unset($options['template']);
         }
-        $result['content'] = $content;
-        return $result;
+        return compact('content') + $options;
     }
 
     protected function _headers($headers)
