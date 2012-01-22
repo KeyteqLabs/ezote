@@ -2,8 +2,6 @@
 
 namespace ezote;
 
-use \eZExtension;
-
 class Autoloader
 {
     public static $extensionDir = null;
@@ -11,11 +9,11 @@ class Autoloader
     /**
      * Register ezote/Autoloader::autoload as autoloader
      */
-    static public function register()
+    static public function register($extensionDir = false)
     {
         if (!static::$registered)
         {
-            static::$extensionDir = eZExtension::baseDirectory();
+            static::$extensionDir = $extensionDir ?: \eZExtension::baseDirectory();
             static::$registered = spl_autoload_register(array(new self, 'autoload'));
         }
     }
