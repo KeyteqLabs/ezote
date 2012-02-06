@@ -91,11 +91,21 @@ class Response
                 $options += array('pagelayout' => 'pagelayout.tpl');
                 return $this->_renderTpl($content, $options);
             case 'text':
+
                 return array(
                     'pagelayout' => false,
                     'content' => $this->content
                 );
                 break;
+            case 'xml' :
+                $options['headers'] += array(
+                    'Content-type' => 'text/xml'
+                );
+                $this->_headers($options['headers']);
+                echo $content;
+                return eZExecution::cleanExit();
+                break;
+
         }
         return compact('content');
     }
