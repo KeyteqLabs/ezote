@@ -8,7 +8,7 @@ class Response
 {
     protected $content = array();
     protected $options = array();
-    
+
     /**
      * Complete list of HTTP codes mapped to their text counter part
      * @var array
@@ -79,13 +79,15 @@ class Response
         switch ($options['type'])
         {
             case 'json':
-                $options['headers'] += array(
-                    'Content-type' => 'application/json'
-                );
+                $options['headers'] += array('Content-type' => 'application/json');
                 $this->_headers($options['headers']);
                 echo json_encode($content);
-                return eZExecution::cleanExit();
-                break;
+                eZExecution::cleanExit();
+            case 'jsonEncoded':
+                $options['headers'] += array('Content-type' => 'application/json');
+                $this->_headers($options['headers']);
+                echo $content;
+                eZExecution::cleanExit();
             case 'tpl':
                 // Default pagelayout
                 $options += array('pagelayout' => 'pagelayout.tpl');
