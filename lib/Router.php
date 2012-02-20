@@ -16,6 +16,7 @@ class Router
         $class = Inflector::camelize($module);
         $nsClass = join('\\', array($extension, 'modules', $module, $class));
         // TODO Pass in context in constructor?
+        trigger_error($nsClass, $class, $action);
         $controller = new $nsClass();
         $response = call_user_func_array(array($controller, $action), $params);
         if (!($response instanceof \ezote\lib\Response))
