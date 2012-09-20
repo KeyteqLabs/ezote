@@ -1,47 +1,51 @@
 <?php
+
 /**
- * eZ on the Edge
+ * Response-controller
  *
- * @copyright     Copyright 2011, Keyteq AS (http://keyteq.no/labs)
- * @license       http://opensource.org/licenses/mit-license.php The MIT License
+ * @copyright //autogen//
+ * @license //autogen//
+ * @version //autogen//
  */
 
 namespace ezote\lib;
 
-use \eZExecution;
+use \ezote\lib\EndpointGenerator;
 
-/**
- * Automapped web controller that has every public method
- * made available under the /ezote/delegate/<extension>/<controller>
- */
+/** Response-controller. */
 class Controller
 {
-    public $http;
+    /** @var \eZHTTPTool */
+    public static $http;
 
-    protected static $blockedMethods = array(
-        '__construct', 'response', 'getDefinition'
-    );
-
-    public function __construct()
+    public static function init()
     {
-        $this->http = HTTP::instance();
+        self::$http = \eZHTTPTool::instance();
     }
 
     /**
+     *
      * Helper to create a `Response` object
+     *
      * @param mixed $content
      * @param array $options
-     * @return \ezote\lib\Response
+     *
+     * @return Response
+     *
      */
     public static function response($content = array(), array $options = array())
     {
-        return new Response($content, $options);
+        $response = new Response($content, $options);
+        return $response->run();
     }
 
     /**
      * Build the needed information for module setup
      *
+     * @param array $merge
+     *
      * @return array Three members: Module, FunctionList and ViewList
+     *
      */
     public static function getDefinition(array $merge = array())
     {
@@ -49,20 +53,21 @@ class Controller
         $classParts = explode('\\', $class);
         $className = array_pop($classParts);
         $ViewList = array();
-        foreach (get_class_methods($class) as $view)
-        {
-            if (in_array($view, static::$blockedMethods)) continue;
+        $validMethods = EndpointGenerator::getAvailableMethods($class);
 
+        foreach ($validMethods as $view)
+        {
             $ViewList[$view] = array('script' => 'module.php');
+
             if (isset($merge['ViewList']))
                 $ViewList[$view] += $merge['ViewList'];
         }
 
-        $Module = array(
-            'name' => Inflector::underscore($className)
-        );
+        $Module = array('name' => $className);
         $FunctionList = array();
 
         return array($Module, $FunctionList, $ViewList);
     }
 }
+
+Controller::init();

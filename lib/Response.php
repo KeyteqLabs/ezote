@@ -1,19 +1,26 @@
 <?php
 
+/**
+ * Handles module-respons
+ *
+ * @copyright //autogen//
+ * @license //autogen//
+ * @version //autogen//
+ */
+
 namespace ezote\lib;
 
-use \eZExecution;
-
+/** Handles module-response, */
 class Response
 {
+    /** @var array Response-contents. */
     protected $content = array();
+    /** @var array Response-options. */
     protected $options = array();
 
-    /**
-     * Complete list of HTTP codes mapped to their text counter part
-     * @var array
-     */
-    protected $codes = array(
+    /** @var array Complete list of HTTP codes mapped to their text counter part. */
+    protected $codes = array
+    (
         200 => 'OK',
         201 => 'Created',
         202 => 'Accepted',
@@ -57,16 +64,32 @@ class Response
         505 => 'HTTP Version Not Supported'
     );
 
+    /**
+     *
+     * Creates a new object-instance.
+     *
+     * @param array $content
+     * @param array $options
+     *
+     */
     public function __construct($content = array(), array $options = array())
     {
         $this->content = $content;
-        $this->options = $options + array(
+        $this->options = $options + array
+        (
             'status' => 200,
             'type' => 'tpl',
             'headers' => array()
         );
     }
 
+    /**
+     *
+     * Builds the response-data.
+     *
+     * @return mixed|void
+     *
+     */
     public function run()
     {
         $content = $this->content;
@@ -80,39 +103,47 @@ class Response
         {
             case 'json':
                 $options['headers'] += array('Content-type' => 'application/json');
-                $this->_headers($options['headers']);
+                $this->headers($options['headers']);
                 echo json_encode($content);
-                eZExecution::cleanExit();
+                break;
             case 'jsonEncoded':
                 $options['headers'] += array('Content-type' => 'application/json');
-                $this->_headers($options['headers']);
-                echo $content;
-                eZExecution::cleanExit();
+                $this->headers($options['headers']);
+                return compact('content');
             case 'tpl':
-                // Default pagelayout
+                /** Default pagelayout. */
                 $options += array('pagelayout' => 'pagelayout.tpl');
-                return $this->_renderTpl($content, $options);
+                return $this->renderTpl($content, $options);
             case 'text':
-
-                return array(
+                return array
+                (
                     'pagelayout' => false,
                     'content' => $this->content
                 );
-                break;
             case 'xml' :
-                $options['headers'] += array(
-                    'Content-type' => 'text/xml'
-                );
-                $this->_headers($options['headers']);
+                $options['headers'] += array('Content-type' => 'text/xml');
+                $this->headers($options['headers']);
                 echo $content;
-                return eZExecution::cleanExit();
                 break;
 
         }
-        return compact('content');
+
+        Router::handleEZXFormToken(true);
+
+        return \eZExecution::cleanExit();
     }
 
-    protected function _renderTpl($content, array $options = array())
+    /**
+     *
+     * Renders a template.
+     *
+     * @param $content
+     * @param array $options
+     *
+     * @return array
+     *
+     */
+    protected function renderTpl($content, array $options = array())
     {
         if (isset($options['template']))
         {
@@ -128,7 +159,14 @@ class Response
         return compact('content') + $options;
     }
 
-    protected function _headers($headers)
+    /**
+     *
+     * Outputs headers.
+     *
+     * @param $headers
+     *
+     */
+    protected function headers($headers)
     {
         foreach ($headers as $name => $value)
             header($name . ': ' . $value);
