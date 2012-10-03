@@ -115,8 +115,7 @@ class Response
                 $options += array('pagelayout' => 'pagelayout.tpl');
                 return $this->renderTpl($content, $options);
             case 'text':
-                return array
-                (
+                return array(
                     'pagelayout' => false,
                     'content' => $this->content
                 );
@@ -153,7 +152,7 @@ class Response
                 foreach ($content as $key => $val)
                     $tpl->setVariable($key, $val);
             }
-            $content = $tpl->fetch($options['template']);
+            return $tpl->fetch($options['template']);
             unset($options['template']);
         }
         return compact('content') + $options;

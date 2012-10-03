@@ -74,13 +74,16 @@ class EndpointGenerator
      *
      * Retrieves available endpoint-methods for a given class.
      *
-     * @param $class
-     *
+     * @param string $class
+     * @param array $options
      * @return array
-     *
      */
-    public static function getAvailableMethods($class)
+    public static function getAvailableMethods($class, array $options = array())
     {
+        $options += array(
+            'static' => true,
+            'public' => true
+        );
         $reflector = new \ReflectionClass($class);
         $methods = $reflector->getMethods();
         $validMethods = array();
@@ -89,7 +92,9 @@ class EndpointGenerator
         foreach ($methods as $method)
         {
             /** Only public and static methods. */
-            if (!$method->isPublic() || !$method->isStatic())
+            if ($options['static'] && !$method->isStatic())
+                continue;
+            if ($options['public'] && !$method->isPublic())
                 continue;
 
             /** No inherited methods as endpoints. */

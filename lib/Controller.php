@@ -43,17 +43,15 @@ class Controller
      * Build the needed information for module setup
      *
      * @param array $merge
-     *
      * @return array Three members: Module, FunctionList and ViewList
-     *
      */
-    public static function getDefinition(array $merge = array())
+    public static function getDefinition(array $merge = array(), array $options = array())
     {
         $class = get_called_class();
         $classParts = explode('\\', $class);
         $className = array_pop($classParts);
         $ViewList = array();
-        $validMethods = EndpointGenerator::getAvailableMethods($class);
+        $validMethods = EndpointGenerator::getAvailableMethods($class, $options);
 
         foreach ($validMethods as $view)
         {

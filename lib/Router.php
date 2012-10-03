@@ -87,6 +87,29 @@ class Router
     }
 
     /**
+     * Route a delegate uri to a different extensions modules
+     * @param string $module
+     * @param string $action
+     * @param array $params
+     * @return \ezote\lib\Response;
+     */
+    public function legacyHandle($extension, $module, $action, $params)
+    {
+        self::handleEZXFormToken();
+
+        $class = Inflector::camelize($module);
+        $nsClass = join('\\', array($extension, 'modules', $module, $class));
+        // TODO Pass in context in constructor?
+        $controller = new $nsClass();
+        $response = call_user_func_array(array($controller, $action), $params);
+        if (!($response instanceof \ezote\lib\Response))
+            $response = new Response($response);
+
+        self::handleEZXFormToken(true);
+        return $response;
+    }
+
+    /**
      *
      * Handles casese where the token is reset during a request.
      *
