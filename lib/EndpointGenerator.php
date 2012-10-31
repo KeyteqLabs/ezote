@@ -80,10 +80,7 @@ class EndpointGenerator
      */
     public static function getAvailableMethods($class, array $options = array())
     {
-        $options += array(
-            'static' => true,
-            'public' => true
-        );
+        $options += array('public' => true);
         $reflector = new \ReflectionClass($class);
         $methods = $reflector->getMethods();
         $validMethods = array();
@@ -91,9 +88,7 @@ class EndpointGenerator
         /** @var $method \ReflectionMethod */
         foreach ($methods as $method)
         {
-            /** Only public and static methods. */
-            if ($options['static'] && !$method->isStatic())
-                continue;
+            /** Only public methods. */
             if ($options['public'] && !$method->isPublic())
                 continue;
 

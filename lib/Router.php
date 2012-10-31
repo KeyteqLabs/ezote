@@ -49,8 +49,7 @@ class Router
             $ezjscoreIni = \eZINI::instance('ezjscore.ini');
             $iniNamespace = $className . '_' . $methodName;
 
-            if ($ezjscoreIni->hasVariable('ezjscServer_' . $iniNamespace, 'Class'))
-            {
+            if ($ezjscoreIni->hasVariable('ezjscServer_' . $iniNamespace, 'Class')) {
                 $className = $ezjscoreIni->variable('ezjscServer_' . $iniNamespace, 'Class');
 
                 self::$callback = array($className, $methodName);
@@ -80,6 +79,9 @@ class Router
 
         if (self::parseArgs($args))
             $response = call_user_func_array(self::$callback, self::$parsedArgs);
+        /** Legacy-support. */
+        else
+            $response = call_user_func_array(array('self', 'handleLegacy'), func_get_args());
 
         self::handleEZXFormToken(true);
 
@@ -88,9 +90,12 @@ class Router
 
     /**
      * Route a delegate uri to a different extensions modules
+     *
+     * @param $extension
      * @param string $module
      * @param string $action
      * @param array $params
+     *
      * @return \ezote\lib\Response;
      */
     public function legacyHandle($extension, $module, $action, $params)
@@ -126,10 +131,8 @@ class Router
         {
             if ($restore)
             {
-                if (isset(self::$ezxFormToken)&&!empty(self::$ezxFormToken))
-                {
+                if (isset(self::$ezxFormToken) &&!empty(self::$ezxFormToken))
                     \eZSession::set(\ezxFormToken::SESSION_KEY, self::$ezxFormToken);
-                }
             }
             else
                 self::$ezxFormToken= \eZSession::get(\ezxFormToken::SESSION_KEY);
@@ -145,9 +148,9 @@ class Router
      */
     public static function getEzxFormToken()
     {
-        if (empty(self::$ezxFormToken) || self::$ezxFormToken == '') {
+        if (empty(self::$ezxFormToken) || self::$ezxFormToken == '')
             return false;
-        }
+
         return self::$ezxFormToken;
     }
 
