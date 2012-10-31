@@ -79,9 +79,6 @@ class Router
 
         if (self::parseArgs($args))
             $response = call_user_func_array(self::$callback, self::$parsedArgs);
-        /** Legacy-support. */
-        else
-            $response = call_user_func_array(array('self', 'handleLegacy'), func_get_args());
 
         self::handleEZXFormToken(true);
 
