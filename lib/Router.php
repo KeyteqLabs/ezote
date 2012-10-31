@@ -79,6 +79,10 @@ class Router
 
         if (self::parseArgs($args))
             $response = call_user_func_array(self::$callback, self::$parsedArgs);
+        else {
+            $params = func_get_args();
+            $response = call_user_func_array(array('self', 'legacyHandle'), $params);
+        }
 
         self::handleEZXFormToken(true);
 
