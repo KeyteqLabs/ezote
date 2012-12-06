@@ -1,0 +1,5 @@
+<?php /*
+[TemplateSettings]
+ExtensionAutoloadPath[]=ezote
+*/
+?>

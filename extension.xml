@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<software>
+    <metadata>
+        <name>eZ On The Edge</name>
+        <version>1.0.0</version>
+        <copyright>Copyright (C) 2012 Keyteq AS</copyright>
+    </metadata>
+
+    <dependencies>
+        <uses>
+            <extension name="ezflow"/>
+        </uses>
+    </dependencies>
+</software>
