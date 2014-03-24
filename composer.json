@@ -1,0 +1,22 @@
+{
+    "name": "keyteqlabs/ezote",
+    "description": "Build eZ 4.x extensions more easily",
+    "type": "ezpublish-legacy-extension",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Raymond Julin",
+            "email": "raymond.julin@gmail.com"
+        },
+        {
+            "name": "Henning Kvinnesland",
+            "email": "henning@keyteq.no"
+        },
+        {
+            "name": "Bjørnar Helland",
+            "email": "bh@keyteq.no"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {}
+}
