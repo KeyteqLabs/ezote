@@ -18,5 +18,7 @@
         }
     ],
     "minimum-stability": "dev",
-    "require": {}
+    "require": {
+        "ezsystems/ezpublish-legacy-installer": "*"
+    }
 }
